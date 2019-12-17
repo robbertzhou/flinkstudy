@@ -8,6 +8,76 @@
     <artifactId>flinkstudy</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <kafka.version>2.0.0</kafka.version>
+        <scala.version>2.11.8</scala.version>
+        <spark.version>2.3.0</spark.version>
+        <flink.version>1.7.0</flink.version>
+        <scala.binary.version>2.11</scala.binary.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-java</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-scala_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-jdbc_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+
+        </dependency>
+
+
+        <dependency>
+
+            <groupId>org.apache.flink</groupId>
+
+            <artifactId>flink-table_${scala.binary.version}</artifactId>
+
+            <version>1.7.0</version>
+
+        </dependency>
+
+        <!-- Add connector dependencies here. They must be in the default scope (compile). -->
+
+        <dependency>
+
+            <groupId>org.apache.flink</groupId>
+
+            <artifactId>flink-connector-kafka-0.10_${scala.binary.version}</artifactId>
+
+            <version>${flink.version}</version>
+
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.2</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
