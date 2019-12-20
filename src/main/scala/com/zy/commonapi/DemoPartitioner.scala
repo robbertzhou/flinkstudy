@@ -14,21 +14,18 @@ import org.apache.flink.streaming.api._
 object DemoPartitioner {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
-    import org.apache.flink.streaming.api._
+    import org.apache.flink.streaming.api.scala._
     val src = env.addSource(new NoParallelSource())
-    val tupleData = src.map[Tuple1[Long]](new MapFunction[Long,Tuple1[Long]] {
-      override def map(t: Long): Tuple1[Long] = {
-        Tuple1(t)
+    val tupleData = src.map[org.apache.flink.api.java.tuple.Tuple1[Long]](new MapFunction[Long, org.apache.flink.api.java.tuple.Tuple1[Long]] {
+      override def map(t: Long): org.apache.flink.api.java.tuple.Tuple1[Long] = {
+        val t1 = new org.apache.flink.api.java.tuple.Tuple1[Long]()
+        t1.f0 = t
+        return t1
       }
     })
 
-//    tupleData.partitionCustom(new MyPartitioner,0)
-    val mm = tupleData.map(new MapFunction[Tuple1[Long],Long]() {
-      override def map(value: Tuple1[Long]): Long = {
-        value._1
-      }
-    })
-    mm.print()
+    tupleData.partitionCustom(new MyPartitioner,0)
+
 
 
     env.execute("partition test.")
