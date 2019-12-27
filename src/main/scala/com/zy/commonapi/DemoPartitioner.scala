@@ -13,10 +13,10 @@ object DemoPartitioner {
     import org.apache.flink.api.scala._
     val src = env.addSource(new NoParallelSource)
 
-    val tupleData = src.map(
-      line => {
-      Tuple1(line)
-    }).print()
+//    val tupleData = src.map(
+//      line => {
+//      Tuple1(line)
+//    }).print()
 
 
 //    maped.partitionCustom(new MyPartitioner(),1).print()
