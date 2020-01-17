@@ -7,9 +7,9 @@ import scala.util.Random
 class StudentSource extends RichSourceFunction[Student]{
   override def run(ctx: SourceFunction.SourceContext[Student]): Unit = {
     while (true){
-      Thread.sleep(20)
+      Thread.sleep(1)
       val rand = new Random()
-      val uid = rand.nextInt(3000)
+      val uid = rand.nextInt(3000000)
       val stu = new Student(uid,"name" + uid)
       ctx.collect(stu)
     }
