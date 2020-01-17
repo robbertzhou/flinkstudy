@@ -4,6 +4,11 @@ import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, Sour
 
 import scala.util.Random
 
+/**
+  * @create 2020-01-17
+  * @author zhouyu
+  * @desc student source
+  */
 class StudentSource extends RichSourceFunction[Student]{
   override def run(ctx: SourceFunction.SourceContext[Student]): Unit = {
     while (true){
