@@ -13,7 +13,9 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 public class WindowTest {
     public static void main(String[] args) throws Exception{
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
         DataStream<String> source = env.addSource(new MovieRatingSource(), TypeInformation.of(String.class));
+        source.print();
         DataStream<MovieRate> maped = source.map(new MapFunction<String, MovieRate>() {
             @Override
             public MovieRate map(String value) throws Exception {
