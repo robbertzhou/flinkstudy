@@ -14,6 +14,7 @@ object TestSink {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val source = env.addSource(new NoParallelSource)
     source.addSink(new MySink())
+    source.addSink(new SecondSink())
     env.execute("")
   }
 }
