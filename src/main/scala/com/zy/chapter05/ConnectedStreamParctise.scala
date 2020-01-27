@@ -39,6 +39,7 @@ class TupleFunction extends CoMapFunction[Tuple1[String],Tuple1[Int],Tuple2[Int,
 class MyProcessFunction extends CoProcessFunction[String,Int,(Int, String)]{
   override def processElement1(value: String, ctx: CoProcessFunction[String, Int, (Int, String)]#Context,
                                out: Collector[(Int, String)]): Unit = {
+//    ctx.timestamp()5
     out.collect(Tuple2(10,"jack"))
   }
 
