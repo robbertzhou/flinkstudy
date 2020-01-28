@@ -24,7 +24,7 @@ class TempIncreaseAlertFunction extends KeyedProcessFunction[String,SensorReadin
     //获取前一个温度
     val prevTemp = lastTemp.value()
     //更新最近一次的温度
-    lastTemp.update(value.temperature
+    lastTemp.update(value.temperature)
     val curTimerTimestamp = currentTime.value()
 
   }

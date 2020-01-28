@@ -43,7 +43,8 @@ class SensorSource extends RichParallelSourceFunction[SensorReading] {
 
     // initialize sensor ids and temperatures
     var curFTemp = (1 to 10).map {
-      i => ("sensor_" + (taskIdx * 10 + i), 65 + (rand.nextGaussian() * 20))
+//      i => ("sensor_" + (taskIdx * 10 + i), 65 + (rand.nextGaussian() * 20))
+      i => ("sensor_" + (taskIdx * 1 + i), 6 + (rand.nextGaussian() * 2))
     }
 
     // emit data until being canceled
