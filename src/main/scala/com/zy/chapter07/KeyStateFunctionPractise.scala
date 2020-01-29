@@ -14,8 +14,10 @@ object KeyStateFunctionPractise {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val source = env.addSource(new SensorSource)
     val keyedStream = source.keyBy(_.id)
-    val alerts : DataStream[(String,Double,Double)] =
-      keyedStream.flatMap(new TemperatureAlertFunction(19))
+//    val alerts : DataStream[(String,Double,Double)] =
+//      keyedStream.flatMap(new TemperatureAlertFunction(19))
+   val alerts : DataStream[(Int,Long)] =
+      keyedStream.flatMap(new HighTempCounter(3))
     alerts.print()
     env.execute("value state practise")
   }
