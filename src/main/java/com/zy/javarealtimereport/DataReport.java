@@ -111,18 +111,18 @@ public class DataReport {
 //                .apply(new MyAggFunction());
 //
 //        //获取延迟数据
-//        DataStream<Tuple3<Long,String,String>> sideOutput = resultData.getSideOutput(outputTag);
+        DataStream<Tuple3<Long,String,String>> sideOutput = resultData.getSideOutput(outputTag);
 //        /**
 //         * 把延迟数据放入kafka中
 //         */
-//        String outTopic = "lateLog";
-//        Properties propOut = new Properties();
-//        propOut.setProperty("bootstrap.servers","master.zy.com:9092");
-//        propOut.setProperty("transaction.timeout.ms","60000");
-//        FlinkKafkaProducer011<String> myProducer = new FlinkKafkaProducer011<String>(outTopic,
-//                new KeyedSerializationSchemaWrapper<>(new SimpleStringSchema()),propOut,FlinkKafkaProducer011.Semantic.EXACTLY_ONCE);
+        String outTopic = "lateLog";
+        Properties propOut = new Properties();
+        propOut.setProperty("bootstrap.servers","master.zy.com:9092");
+        propOut.setProperty("transaction.timeout.ms","60000");
+        FlinkKafkaProducer011<String> myProducer = new FlinkKafkaProducer011<String>(outTopic,
+                new KeyedSerializationSchemaWrapper<>(new SimpleStringSchema()),propOut,FlinkKafkaProducer011.Semantic.EXACTLY_ONCE);
 //
-//        sideOutput.map(new SideDataMap()).addSink(myProducer);
+        sideOutput.map(new SideDataMap()).addSink(myProducer);
 //
 //        /**
 //         * 计算结果保存到ES
