@@ -128,14 +128,14 @@ public class DataReport {
 //         * 计算结果保存到ES
 //         */
 
-//        List<HttpHost> httpHosts = new ArrayList<>();
-//        httpHosts.add(new HttpHost("master.zy.com",9200,"http"));
-//        ElasticsearchSink.Builder<Tuple4<String,String,String,Long>> esSinkBuilder =
-//                new ElasticsearchSink.Builder<>(httpHosts,
-//                        new DataInsertElasticsearch());
-//        esSinkBuilder.setBulkFlushMaxActions(1);
-//        resultData.addSink(esSinkBuilder.build());
-        resultData.print();
+        List<HttpHost> httpHosts = new ArrayList<>();
+        httpHosts.add(new HttpHost("master.zy.com",9200,"http"));
+        ElasticsearchSink.Builder<Tuple4<String,String,String,Long>> esSinkBuilder =
+                new ElasticsearchSink.Builder<>(httpHosts,
+                        new DataInsertElasticsearch());
+        esSinkBuilder.setBulkFlushMaxActions(1);
+        resultData.addSink(esSinkBuilder.build());
+//        resultData.print();
 
 
         env.execute("DataReport");
