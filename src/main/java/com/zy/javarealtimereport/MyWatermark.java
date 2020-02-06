@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 public class MyWatermark implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, String>> {
 
     Long currentMaxTimestamp = 0L;
-    final Long maxOutOfOrderness = 10000L;// 最大允许的乱序时间是10s
+    final Long maxOutOfOrderness = 1000L;// 最大允许的乱序时间是10s
 
     @Nullable
     @Override

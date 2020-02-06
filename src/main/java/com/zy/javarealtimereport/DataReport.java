@@ -4,13 +4,16 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.runtime.state.filesystem.FsStateBackend;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -54,7 +57,7 @@ public class DataReport {
         config.setCheckpointTimeout(10000);
         config.setMaxConcurrentCheckpoints(1);
         config.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
-        env.setStateBackend(new MemoryStateBackend());
+        env.setStateBackend(new FsStateBackend("hdfs://master.zy.com:8020/tmp"));
 
         /**
          * 配置kafka source
@@ -84,43 +87,56 @@ public class DataReport {
         //保存延迟太久的数据
         OutputTag<Tuple3<Long,String,String>> outputTag = new OutputTag<Tuple3<Long,String,String>>("late-data"){};
 
-        /**
-         * 窗口操作统计
-         */
-        SingleOutputStreamOperator<Tuple4<String,String,String,Long>> resultData =
-                filterData
-                        .assignTimestampsAndWatermarks(new MyWatermark())
+//        KeyedStream<Tuple3<Long,String,String>,Tuple> rs = filterData.keyBy(1,2);
+//                .assignTimestampsAndWatermarks(new MyWatermark());
+        SingleOutputStreamOperator<Tuple4<String,String,String,Long>> resultData =  filterData
+                .assignTimestampsAndWatermarks(new MyWatermark())
                 .keyBy(1,2)
                 .window(TumblingEventTimeWindows.of(Time.seconds(3)))
-//                .allowedLateness(Time.seconds(6))
-//                .sideOutputLateData(outputTag)
-                .apply(new MyAggFunction());
+                .allowedLateness(Time.seconds(6))
+                .sideOutputLateData(outputTag)
+                .apply(new MyAggFunction())
+                ;
 
-        //获取延迟数据
-        DataStream<Tuple3<Long,String,String>> sideOutput = resultData.getSideOutput(outputTag);
-        /**
-         * 把延迟数据放入kafka中
-         */
-        String outTopic = "lateLog";
-        Properties propOut = new Properties();
-        propOut.setProperty("bootstrap.servers","master.zy.com:9092");
-        propOut.setProperty("transaction.timeout.ms","60000");
-        FlinkKafkaProducer011<String> myProducer = new FlinkKafkaProducer011<String>(outTopic,
-                new KeyedSerializationSchemaWrapper<>(new SimpleStringSchema()),propOut,FlinkKafkaProducer011.Semantic.EXACTLY_ONCE);
+//        /**
+//         * 窗口操作统计
+//         */
+//        SingleOutputStreamOperator<Tuple4<String,String,String,Long>> resultData =
+//                filterData
+//                        .assignTimestampsAndWatermarks(new MyWatermark())
+//                .keyBy(1,2)
+//                .window(TumblingEventTimeWindows.of(Time.seconds(3)))
+////                .allowedLateness(Time.seconds(6))
+////                .sideOutputLateData(outputTag)
+//                .apply(new MyAggFunction());
+//
+//        //获取延迟数据
+//        DataStream<Tuple3<Long,String,String>> sideOutput = resultData.getSideOutput(outputTag);
+//        /**
+//         * 把延迟数据放入kafka中
+//         */
+//        String outTopic = "lateLog";
+//        Properties propOut = new Properties();
+//        propOut.setProperty("bootstrap.servers","master.zy.com:9092");
+//        propOut.setProperty("transaction.timeout.ms","60000");
+//        FlinkKafkaProducer011<String> myProducer = new FlinkKafkaProducer011<String>(outTopic,
+//                new KeyedSerializationSchemaWrapper<>(new SimpleStringSchema()),propOut,FlinkKafkaProducer011.Semantic.EXACTLY_ONCE);
+//
+//        sideOutput.map(new SideDataMap()).addSink(myProducer);
+//
+//        /**
+//         * 计算结果保存到ES
+//         */
 
-        sideOutput.map(new SideDataMap()).addSink(myProducer);
-
-        /**
-         * 计算结果保存到ES
-         */
-        List<HttpHost> httpHosts = new ArrayList<>();
-        httpHosts.add(new HttpHost("master.zy.com",9200,"http"));
-        ElasticsearchSink.Builder<Tuple4<String,String,String,Long>> esSinkBuilder =
-                new ElasticsearchSink.Builder<>(httpHosts,
-                        new DataInsertElasticsearch());
-        esSinkBuilder.setBulkFlushMaxActions(1);
+//        List<HttpHost> httpHosts = new ArrayList<>();
+//        httpHosts.add(new HttpHost("master.zy.com",9200,"http"));
+//        ElasticsearchSink.Builder<Tuple4<String,String,String,Long>> esSinkBuilder =
+//                new ElasticsearchSink.Builder<>(httpHosts,
+//                        new DataInsertElasticsearch());
+//        esSinkBuilder.setBulkFlushMaxActions(1);
 //        resultData.addSink(esSinkBuilder.build());
         resultData.print();
+
 
         env.execute("DataReport");
     }
