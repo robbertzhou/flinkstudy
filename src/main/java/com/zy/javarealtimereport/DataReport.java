@@ -22,9 +22,9 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunction;
 import org.apache.flink.streaming.connectors.elasticsearch.RequestIndexer;
 import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
-import org.apache.flink.streaming.connectors.kafka.internal.FlinkKafkaProducer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer010;
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchemaWrapper;
 import org.apache.flink.util.OutputTag;
 import org.apache.http.HttpHost;
@@ -35,6 +35,8 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import static org.apache.flink.streaming.api.CheckpointingMode.EXACTLY_ONCE;
 
 /***
  * @create 2020-02-06
@@ -52,7 +54,7 @@ public class DataReport {
         //set checkpoint
         env.enableCheckpointing(60000L);
         CheckpointConfig config = env.getCheckpointConfig();
-        config.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        config.setCheckpointingMode(EXACTLY_ONCE);
         config.setMinPauseBetweenCheckpoints(30000);
         config.setCheckpointTimeout(10000);
         config.setMaxConcurrentCheckpoints(1);
@@ -67,7 +69,7 @@ public class DataReport {
         props.setProperty("bootstrap.servers","master.zy.com:9092");
         props.setProperty("group.id","con1");
 
-        FlinkKafkaConsumer011<String> myConsumer = new FlinkKafkaConsumer011<String>(topic,new SimpleStringSchema(),props);
+        FlinkKafkaConsumer010<String> myConsumer = new FlinkKafkaConsumer010<String>(topic,new SimpleStringSchema(),props);
 
         /**
          * 获取kafka数据
@@ -119,8 +121,8 @@ public class DataReport {
         Properties propOut = new Properties();
         propOut.setProperty("bootstrap.servers","master.zy.com:9092");
         propOut.setProperty("transaction.timeout.ms","60000");
-        FlinkKafkaProducer011<String> myProducer = new FlinkKafkaProducer011<String>(outTopic,
-                new KeyedSerializationSchemaWrapper<>(new SimpleStringSchema()),propOut,FlinkKafkaProducer011.Semantic.EXACTLY_ONCE);
+        FlinkKafkaProducer010<String> myProducer = new FlinkKafkaProducer010<String>(outTopic,
+                new KeyedSerializationSchemaWrapper<>(new SimpleStringSchema()),propOut);
 //
         sideOutput.map(new SideDataMap()).addSink(myProducer);
 //

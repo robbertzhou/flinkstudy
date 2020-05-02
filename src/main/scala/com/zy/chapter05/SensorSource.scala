@@ -38,13 +38,15 @@ class SensorSource extends RichParallelSourceFunction[SensorReading] {
 
     // initialize random number generator
     val rand = new Random()
+
     // look up index of this parallel task
     val taskIdx = this.getRuntimeContext.getIndexOfThisSubtask
 
     // initialize sensor ids and temperatures
-    var curFTemp = (1 to 10).map {
+    var curFTemp = (1 to 1000).map {
 //      i => ("sensor_" + (taskIdx * 10 + i), 65 + (rand.nextGaussian() * 20))
-      i => ("sensor_" + (taskIdx * 1 + i), 6 + (rand.nextGaussian() * 2))
+//      i => ("sensor_" + (taskIdx * 1 + i), 6 + (rand.nextGaussian() * 2))
+      i => ("sensor_" + rand.nextInt(2000000000), 6 + (rand.nextGaussian() * 2))
     }
 
     // emit data until being canceled
@@ -59,7 +61,7 @@ class SensorSource extends RichParallelSourceFunction[SensorReading] {
       curFTemp.foreach( t => srcCtx.collect(new SensorReading(t._1, curTime, t._2)))
 
       // wait for 100 ms
-      Thread.sleep(100)
+      Thread.sleep(1)
     }
 
   }

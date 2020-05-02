@@ -75,6 +75,7 @@ public class StreamingWindowWatermark {
                         System.out.println("window compute.");
                     }
                 });
+
         window.print();
         env.execute("");
     }

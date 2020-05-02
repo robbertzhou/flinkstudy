@@ -7,9 +7,9 @@ import java.util.Date
   * @create 2020-01-23
   * @author zhouyu
   * @desc 定义一个传感器类
-  * @param id
-  * @param timestamp
-  * @param temperature
+  * @param ii
+  * @param ts
+  * @param tt
   *
   */
 class SensorReading(ii: String, ts: Long, tt: Double) extends Serializable {
