@@ -188,6 +188,12 @@
             <artifactId>kudu-client</artifactId>
             <version>1.10.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.facebook.presto/presto-jdbc -->
+        <dependency>
+            <groupId>com.facebook.presto</groupId>
+            <artifactId>presto-jdbc</artifactId>
+            <version>0.236</version>
+        </dependency>
 
     </dependencies>
 
