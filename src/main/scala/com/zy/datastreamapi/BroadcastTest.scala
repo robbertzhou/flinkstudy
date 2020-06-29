@@ -51,7 +51,7 @@ object BroadcastTest {
      */
     myConsumer.setStartFromEarliest()
     val data = env.addSource(myConsumer)
-    val tmp = data.connect(centersBroadcast).process(new UpdateCenter)
+    val tmp = data.connect(centersBroadcast).process(new UpdateCenter(broadcastStateDescritor))
     tmp.print()
     env.execute("broadcast test")
   }

@@ -25,6 +25,7 @@ class KuduSource extends RichSourceFunction[(Long,String)]{
       val name = rs.getString(2)
       sourceContext.collect((id,name))
     }
+
   }
 
   override def cancel(): Unit = {
