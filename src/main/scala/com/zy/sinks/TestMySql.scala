@@ -1,7 +1,6 @@
 package com.zy.sinks
 
 import org.apache.flink.api.common.typeinfo.{TypeInformation, Types}
-import org.apache.flink.api.java.io.jdbc.JDBCOutputFormat
 import org.apache.flink.streaming.api.functions.source.{RichSourceFunction, SourceFunction}
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.scala._
@@ -36,13 +35,13 @@ object TestMySql {
       override def cancel(): Unit = {}
     })
 
-    val frm = JDBCOutputFormat.buildJDBCOutputFormat()
-      .setDrivername("com.mysql.jdbc.Driver").setDBUrl("jdbc:mysql://192.168.0.126:3306/testdb")
-      .setUsername("root")
-      .setPassword("mima")
-      .setQuery("insert into t_test(id,name) values(?,?)")
-      .finish()
-    src.writeUsingOutputFormat(frm)
-    env.execute("hbasesink")
+//    val frm = JDBCOutputFormat.buildJDBCOutputFormat()
+//      .setDrivername("com.mysql.jdbc.Driver").setDBUrl("jdbc:mysql://192.168.0.126:3306/testdb")
+//      .setUsername("root")
+//      .setPassword("mima")
+//      .setQuery("insert into t_test(id,name) values(?,?)")
+//      .finish()
+//    src.writeUsingOutputFormat(frm)
+//    env.execute("hbasesink")
   }
 }
