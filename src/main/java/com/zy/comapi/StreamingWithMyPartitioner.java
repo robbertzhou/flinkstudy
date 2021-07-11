@@ -8,10 +8,17 @@ import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StreamingWithMyPartitioner {
-    public static void main(String[] args) throws Exception{
+    static Logger logger = LoggerFactory.getLogger(StreamingWithMyPartitioner.class);
 
+    public static void main(String[] args) throws Exception{
+//        BasicConfigurator.configure();
+        PropertyConfigurator.configure("/home/app/flink-1.12.0/log4j.propeties");
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
         DataStreamSource<Object> text = env.addSource(new NoParallelSource());
@@ -25,7 +32,7 @@ public class StreamingWithMyPartitioner {
         DataStream<Long> result = partitionData.map(new MapFunction<Tuple1<Long>, Long>() {
             @Override
             public Long map(Tuple1<Long> value) throws Exception {
-                System.out.println("当前线程id:" + Thread.currentThread().getId());
+                logger.info("当前线程id:" + Thread.currentThread().getId());
                 return value.getField(0);
             }
         });

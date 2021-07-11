@@ -45,10 +45,10 @@ public class MainAppPvUv {//todo 已实现 时间函数应用
             ") WITH (\n" +
             "\t'connector.type' = 'kafka',\n" +
             "\t'connector.version' = 'universal',\n" +
-            "\t'connector.topic' = 'topic_uv',\n" +
+            "\t'connector.topic' = 'test',\n" +
             "\t'update-mode' = 'append',\n" +
-            "\t'connector.properties.zookeeper.connect' = '172.24.103.8:2181',\n" +
-            "\t'connector.properties.bootstrap.servers' = '172.24.103.8:9092',\n" +
+            "\t'connector.properties.zookeeper.connect' = 'other:2181',\n" +
+            "\t'connector.properties.bootstrap.servers' = 'other:9092',\n" +
             "\t'connector.startup-mode' = 'latest-offset',\n" +
             "\t'format.type' = 'json'\n" +
             ")";

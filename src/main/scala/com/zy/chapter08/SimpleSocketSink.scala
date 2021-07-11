@@ -21,10 +21,10 @@ class SimpleSocketSink extends RichSinkFunction[SensorReading]{
     writer = new PrintStream(socket.getOutputStream)
   }
 
-  override def invoke(value: SensorReading, context: SinkFunction.Context[_]): Unit = {
-    writer.println(value.toString)
-    writer.flush()
-  }
+//  override def invoke(value: SensorReading, context: SinkFunction.Context[_]): Unit = {
+//    writer.println(value.toString)
+//    writer.flush()
+//  }
 
   override def close(): Unit = {
     writer.close()

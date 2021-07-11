@@ -6,7 +6,7 @@
     <inceptionYear>2008</inceptionYear>
     <properties>
         <scala.version>2.11.8</scala.version>
-        <flink.version>1.11.0</flink.version>
+        <flink.version>1.12.0</flink.version>
     </properties>
 
 
@@ -159,7 +159,16 @@
             <artifactId>flink-connector-redis_2.11</artifactId>
             <version>1.1.5</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients_2.11</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <version>2.8.2</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-connector-kafka -->
         <!--<dependency>-->
@@ -170,7 +179,7 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-kafka-0.10_2.11</artifactId>
-            <version>${flink.version}</version>
+            <version>1.10.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
         <dependency>

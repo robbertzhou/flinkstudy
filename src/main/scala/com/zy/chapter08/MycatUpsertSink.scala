@@ -24,20 +24,20 @@ class MycatUpsertSink extends RichSinkFunction[SensorReading]{
     updateStatement = connection.prepareStatement("update temperature set temp = ? where sensor = ?")
   }
 
-  override def invoke(value: SensorReading, context: SinkFunction.Context[_]): Unit = {
-    updateStatement.setDouble(1,value.temperature)
-    updateStatement.setString(2,value.id)
-    updateStatement.execute()
-    if(updateStatement.getUpdateCount ==0){
-      insertStatement.setString(1,value.id)
-      insertStatement.setDouble(2,value.temperature)
-      insertStatement.execute()
-    }
-  }
+//  override def invoke(value: SensorReading, context: SinkFunction.Context[_]): Unit = {
+//    updateStatement.setDouble(1,value.temperature)
+//    updateStatement.setString(2,value.id)
+//    updateStatement.execute()
+//    if(updateStatement.getUpdateCount ==0){
+//      insertStatement.setString(1,value.id)
+//      insertStatement.setDouble(2,value.temperature)
+//      insertStatement.execute()
+//    }
+//  }
 
-  override def close(): Unit = {
-    insertStatement.close()
-    updateStatement.close()
-    connection.close()
-  }
+//  override def close(): Unit = {
+//    insertStatement.close()
+//    updateStatement.close()
+//    connection.close()
+//  }
 }

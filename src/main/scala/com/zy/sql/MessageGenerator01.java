@@ -3,10 +3,13 @@ package com.zy.sql;
 
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
@@ -84,7 +87,7 @@ public class MessageGenerator01 {
         //配置信息
         Properties props = new Properties();
         //kafka服务器地址
-        props.put("bootstrap.servers", "172.24.103.8:9092");
+        props.put("bootstrap.servers", "other:9092");
         //设置数据key和value的序列化处理类
         props.put("key.serializer", StringSerializer.class);
         props.put("value.serializer", StringSerializer.class);
@@ -95,10 +98,11 @@ public class MessageGenerator01 {
 
         //每 1 秒请模拟求一次
         Random random = new Random();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         while(true){
 
             Message01 message01 = new Message01();
-            message01.setAccount_id(UUID.randomUUID().toString());
+//            message01.setAccount_id(UUID.randomUUID().toString());
 //            message01.setClient_ip("172.24.103."+random.nextInt(255));
 //            message01.setClient_info(clientInfo[random.nextInt(clientInfo.length)]);
 //            message01.setAction(sources[random.nextInt(sources.length)]);
@@ -107,7 +111,7 @@ public class MessageGenerator01 {
 //            message01.setUdata("json格式扩展信息");
 //            message01.setPosition(position[random.nextInt(position.length)]);
 //            message01.setNetwork(networksUse[random.nextInt(networksUse.length)]);
-//            message01.setP_dt(DateUtils.getCurrentDateOfPattern("yyyy-MM-dd"));
+//            message01.setP_dt(sdf.format(new Date()));
 
             String json = JSONObject.toJSONString(message01);
             try {
